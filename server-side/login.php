@@ -1,37 +1,59 @@
 <?php
+
 include "connection.php";
+require "./../vendor/autoload.php";
 
-$username=$_POST['username'];
-$password=$_POST['password'];
+use Firebase\JWT\JWT;
 
-$query=$connection->prepare("select * from users where username=?");
-$query->bind_param("s",$username);
+$secretKey = "MyTopSecretKey";
+$username = $_POST["username"] ?? null;
+$password = $_POST["password"] ?? null;
 
+
+
+if($username == null || $password == null){
+  echo json_encode([
+    "message" => "Credentials are required"
+  ]);
+
+  return;
+}
+
+$query = $connection->prepare("SELECT * FROM users WHERE username = ?");
+$query->bind_param("s", $username);
 $query->execute();
+
 $result = $query->get_result();
 
-if($result->num_rows>0)
-{
-  $user=$result->fetch_assoc();
-  // $check_pass=password_verify($password,$user["password"]);
+if($result->num_rows != 0) {
+  $user = $result->fetch_assoc();
 
-  if($password==$user["password"])
-  {
+  // $check = password_verify($password, $user["password"]);
+
+  if($password==$user["password"]) {
+    $payload = [
+      "user-id" => $user["user_id"],
+      "user-type" => $user["user_type"]
+    ];
+
+    $token = JWT::encode($payload, $secretKey, "HS256");
+
     echo json_encode([
-      "message"=>"Login succefull",
-      "user"=>$user,
-
+      "message" => "Successful",
+      "user" => $user,
+      "access_token" => $token,
     ]);
-  }else{
+  } else {
+ http_response_code(400);
+
     echo json_encode([
-      "message"=>"invalid credentials"
+      "message" => "Invalid credentials",
     ]);
-
   }
+} else {
+  http_response_code(400);
 
-
-}else {
   echo json_encode([
-    "message"=>"username not found in login"
+    "message" => "Invalid credentials"
   ]);
 }

@@ -32,8 +32,8 @@ if($result->num_rows != 0) {
 
   if($password==$user["password"]) {
     $payload = [
-      "user-id" => $user["user_id"],
-      "user-type" => $user["user_type"]
+      "user_id" => $user["user_id"],
+      "user_type" => $user["user_type"]
     ];
 
     $token = JWT::encode($payload, $secretKey, "HS256");

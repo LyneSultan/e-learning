@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import './../styles/base.css';
 function Login() {
-  const navigate = useNavigate(); // Usage
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,18 +14,14 @@ function Login() {
       method: "POST",
       body: data,
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
+      .then((response) => { return response.json(); })
       .then((data) => {
         console.log(data.user);
+
         if (data.user.ban == 0) {
           localStorage.setItem("token", data.access_token);
+
           if (data.user.user_type === "admin") {
-            console.log("data.user.user_type");
             navigate("/admin");
           } else if (data.user.user_type === "student") {
             navigate("/student");
@@ -35,27 +31,30 @@ function Login() {
         } else {
           console.log("user banned");
         }
-
       })
       .catch((error) => console.error("Error:", error));
   }
 
   return (
-    <div className="App">
-      <div>
+    <div className="flex justify-center align-center flex-column ">
+
+      <h1>Login</h1>
+      <div class="flex flex-column">
+        <label>Name:</label>
         <input
           type="text"
           placeholder="enter your name"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)} required
         />
       </div>
-      <div>
+      <div class="flex flex-column">
+        <label>Password:</label>
         <input
           type="password"
           placeholder="enter your password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)} required
         />
       </div>
       <button onClick={login}>Log in</button>

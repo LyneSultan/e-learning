@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
-const Courses = () => {
-  const location = useLocation();
-  const { courses } = location.state;
+const Courses = ({ courses, setCourses }) => {
+  // const location = useLocation();
+  // const { courses } = location.state;
   console.log(courses);
 
   const [courseTitle, setCourseTitle] = useState("");
@@ -16,7 +15,17 @@ const Courses = () => {
         body: data
       }
     ).then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => {
+        console.log(data);
+        console.log(courses);
+
+        setCourses(() => [
+          ...courses,
+          { course_id: data.course_id, title: courseTitle },
+        ]);
+        console.log(courses);
+
+      })
       .catch(error => console.log("error:", error));
 
   }
@@ -31,6 +40,9 @@ const Courses = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        setCourses((prevCourses) =>
+          prevCourses.filter((course) => course.course_id !== courseId)
+        );
       })
       .catch((error) => console.log("Error deleting course:", error));
   };
@@ -65,7 +77,6 @@ const Courses = () => {
           ))}
         </tbody>
       </table>
-
     </div >
   );
 };

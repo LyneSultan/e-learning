@@ -10,7 +10,10 @@ if ($username) {
     $query->execute();
 
     if ($query->affected_rows>0) {
-        echo json_encode(["message" => "Instructor created successfully"]);
+        echo json_encode(["message" => "Instructor created successfully",
+        "instructor_id"=>$connection->insert_id,
+        "username"=>$username
+        ]);;
     } else {
         echo json_encode(["message" => "Error creating instructor"]);
     }

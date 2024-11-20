@@ -8,7 +8,9 @@ include "connection.php";
      $query->bind_param("s", $title);
 
      if ($query->execute()) {
-         echo json_encode(["message" => "Course created successfully"]);
+         echo json_encode(["message" => "Course created successfully",
+        "course_id"=>$connection->insert_id,
+        "title"=>$title]);
      } else {
          echo json_encode(["message" => "Failed to create course"]);
      }

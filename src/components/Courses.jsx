@@ -1,7 +1,6 @@
 import { useState } from "react";
 const Courses = ({ courses, setCourses }) => {
-  // const location = useLocation();
-  // const { courses } = location.state;
+
   console.log(courses);
 
   const [courseTitle, setCourseTitle] = useState("");
@@ -69,7 +68,7 @@ const Courses = ({ courses, setCourses }) => {
             <tr key={index}>
               <td>{course.title}</td>
               <td>
-                <button >Edit</button>
+                {/* <button >Edit</button> */}
                 <button onClick={() => deleteCourse(course.course_id)}>
                   Delete</button>
               </td>

@@ -15,8 +15,9 @@ function DataTable({ data }) {
           <tr key={index}>
             <td>{item.username}</td>
             <td>
-              <button onClick={() => handleBanUnban(item.user_id, 1)}>Ban</button>
+              <button onClick={() => { handleBanUnban(item.user_id, 1); }}>Ban</button>
               <button onClick={() => handleBanUnban(item.user_id, 0)}>Unban</button>
+
             </td>
           </tr>
         ))}

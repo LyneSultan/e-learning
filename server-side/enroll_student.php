@@ -7,16 +7,15 @@ use Firebase\JWT\Key;
 $secretkey = "MyTopSecretKey";
 $header = getallheaders();
 $jwt=$header["Authorization"];
-$jwt = str_replace('Bearer ', '', $header["Authorization"]); // Ensure proper token extraction
-
-$course_id = $_POST["course_id"] ?? NULL;
-$user_id = null;
+$jwt = str_replace('Bearer ', '', $header["Authorization"]);
 try {
     $key = new Key($secretkey, 'HS256');
     $decode = JWT::decode($jwt, $key);
 
     $user_id = $decode->user_id;
     $user_type = $decode->user_type;
+    $course_id = $_POST["course_id"] ?? NULL;
+
     if($user_type==="student"){
         $query = $connection->prepare("INSERT INTO enrollments (user_id, course_id) VALUES (?, ?)");
         $query->bind_param("ii", $user_id, $course_id);

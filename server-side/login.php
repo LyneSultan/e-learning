@@ -25,12 +25,14 @@ $query->execute();
 
 $result = $query->get_result();
 
-if($result->num_rows != 0) {
+if($result->num_rows > 0) {
   $user = $result->fetch_assoc();
 
-  // $check = password_verify($password, $user["password"]);
+  $check = password_verify($password, $user["password"]);
 
-  if($password==$user["password"]) {
+  if($check) {
+  // if($password==$user["password"]) {
+
     $payload = [
       "user_id" => $user["user_id"],
       "user_type" => $user["user_type"]

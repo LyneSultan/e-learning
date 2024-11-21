@@ -1,20 +1,11 @@
 <?php
+
 include "connection.php";
-require_once './../vendor/autoload.php';
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
+include "auth.php";
 
-$secretKey = "MyTopSecretKey";
-$headers = getallheaders();
-$jwt = $headers["Authorization"];
+[$user_id,$user_type] = authenticate();
+
 try {
-  $key = new Key($secretKey, "HS256");
-  $decode = JWT::decode($jwt, $key);
-
-  $user_id = $decode->user_id;
-  $user_type = $decode->user_type;
-  // echo json_encode(["user-id"=>$user_id,
-  //        "user_type"=>$user_type]);
 
   if($user_type==="instructor"){
 

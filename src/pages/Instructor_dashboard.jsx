@@ -17,25 +17,8 @@ const Instructor_dashboard = () => {
       .catch((e) => console.log(e))
   }, [])
 
-  const [students, setStudents] = useState([]);
-
-
-  useEffect(() => {
-    fetch("http://localhost/e-learning/server-side/view_all.php")
-      .then((response) => response.json())
-      .then((data) => {
-        setStudents(data.students);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-
-
   return (<>
     <h1>your courses</h1>
-    {console.log(students)}
-
     <div className="flex space-around flec-wrap align-center">
       {
         instructorCourses.map((instructorCourse) => (

@@ -1,17 +1,10 @@
 <?php
-include "connection.php";
-require_once './../vendor/autoload.php';
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
-$secretKey="MyTopSecretKey";
-$header=getallheaders();
-$jwt=$header["Authorization"];
-$jwt = str_replace('Bearer ', '', $header["Authorization"]); // Ensure proper token extraction
+include "connection.php";
+include "auth.php";
+
+[$user_id,$user_type] = authenticate();
 try{
-  $key=new Key($secretKey,"HS256");
-$decode=JWT::decode($jwt,$key);
-$user_id = $decode->user_id;
 
 $comment_value=$_POST["comment_value"]??NULL;
 $comment_type=$_POST["comment_type"]??NULL;

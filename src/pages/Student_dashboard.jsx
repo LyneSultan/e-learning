@@ -55,7 +55,7 @@ const Student_dashboard = () => {
                 method: "POST",
                 body: data,
                 headers: {
-                  Authorization: `Bearer ${token}`,
+                  Authorization: localStorage.token,
                 },
               })
                 .then((response) => response.json())

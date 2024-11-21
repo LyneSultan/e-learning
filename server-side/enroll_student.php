@@ -1,21 +1,11 @@
 <?php
 include "connection.php";
-require_once './../vendor/autoload.php';
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
+include "auth.php";
 
-$secretkey = "MyTopSecretKey";
-$header = getallheaders();
-$jwt=$header["Authorization"];
-$jwt = str_replace('Bearer ', '', $header["Authorization"]);
+[$user_id,$user_type] = authenticate();
+$course_id = $_POST["course_id"] ?? NULL;
+
 try {
-    $key = new Key($secretkey, 'HS256');
-    $decode = JWT::decode($jwt, $key);
-
-    $user_id = $decode->user_id;
-    $user_type = $decode->user_type;
-    $course_id = $_POST["course_id"] ?? NULL;
-
     if($user_type==="student"){
         $query = $connection->prepare("INSERT INTO enrollments (user_id, course_id) VALUES (?, ?)");
         $query->bind_param("ii", $user_id, $course_id);
@@ -30,8 +20,6 @@ try {
     }else {
         echo json_encode(["message" => "you are not a student."]);
     }
-
-
 } catch (Exception $e) {
     echo json_encode(["message" => "Invalid token", "error"]);
 }
